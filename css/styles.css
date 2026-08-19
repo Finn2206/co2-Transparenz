@@ -1,0 +1,33 @@
+* ===========================================================
+   Eigene Ergänzungen zum Bootstrap-Layout
+   (Bootstrap übernimmt Grundlayout und Responsivität)
+   =========================================================== */
+
+/* Sortierbare Spaltenköpfe optisch als klickbar kennzeichnen */
+#co2Table thead th[role="button"] {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Sortier-Indikator (Pfeil) hinter dem Spaltentitel */
+#co2Table thead th .sort-ind::after {
+  content: "\2195"; /* Doppelpfeil = unsortiert */
+  opacity: .4;
+  margin-inline-start: .25rem;
+}
+#co2Table thead th[aria-sort="ascending"] .sort-ind::after  { content: "\2191"; opacity: 1; }
+#co2Table thead th[aria-sort="descending"] .sort-ind::after { content: "\2193"; opacity: 1; }
+
+/* Tabellenbeschriftung oben statt unten anzeigen */
+#co2Table caption { caption-side: top; padding-bottom: .5rem; }
+
+/* Sanfte Hervorhebung des Treffers im Filter-Echo */
+#filterEcho { min-height: 1.25rem; }
+
+/* ---- Leserichtung: nur zur Feinjustierung ----
+   Das eigentliche Umsetzen des lokalen Menüs von links (LTR) nach
+   rechts (RTL) übernimmt das Bootstrap-Grid automatisch, sobald am
+   <html>-Element dir="rtl" gesetzt wird. Hier nur kleine Korrekturen. */
+[dir="rtl"] .navbar-nav { text-align: right; }
+[dir="rtl"] .text-md-end { text-align: left !important; }
