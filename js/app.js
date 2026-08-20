@@ -25,16 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* -------------------------------------------------------------------
      SICHERHEIT: Eingaben gegen Code-Injektion absichern
-     1) escapeHTML() wandelt Sonderzeichen in harmlose Entities um.
+     1) sanitizeInput() entfernt spitze Klammern und begrenzt die Länge,
+        sodass gar nicht erst der Anfang eines HTML-Tags im Feld verbleibt.
      2) Beim Schreiben in die Tabelle wird ausschließlich textContent
         genutzt – so wird eingegebener Code niemals als HTML ausgeführt.
+     Ein zusätzliches Escaping von Sonderzeichen ist dadurch entbehrlich:
+     textContent interpretiert Markup grundsätzlich nicht. Erst wenn Werte
+     über innerHTML eingesetzt oder serverseitig verarbeitet würden, käme
+     Escaping als eigene Schutzschicht hinzu.
      ------------------------------------------------------------------- */
-  function escapeHTML(str) {
-    return String(str).replace(/[&<>"'`]/g, ch => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;",
-      '"': "&quot;", "'": "&#39;", "`": "&#96;"
-    }[ch]));
-  }
 
   // Eingabe säubern: nur unbedenkliche Zeichen für die Suche zulassen
   function sanitizeInput(value) {
@@ -133,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const raw = filterCompany.value;
     if (raw.trim() === "") { filterEcho.textContent = ""; return; }
     // Anzeige des (gesäuberten) Suchbegriffs als reiner Text
-    filterEcho.textContent = `Aktive Suche: „${sanitizeInput(raw)}"`;
+    filterEcho.textContent = `Aktive Suche: „${sanitizeInput(raw)}“`;
   }
 
   /* -------------------------------------------------------------------
@@ -152,7 +151,9 @@ document.addEventListener("DOMContentLoaded", () => {
   /* -------------------------------------------------------------------
      Leserichtung je nach gewählter Schriftkultur setzen
      LTR (Deutsch/English): lokales Menü links
-     RTL (Arabisch):        lokales Menü rechts  -> vom Grid automatisch
+     RTL (Arabisch):        lokales Menü rechts
+     Die Spiegelung leistet das Flexbox-Modell: Flex-Container ordnen ihre
+     Elemente entlang der Schreibrichtung an, das Bootstrap-Raster folgt.
      ------------------------------------------------------------------- */
   function setDirection(lang) {
     const rtl = (lang === "ar");
